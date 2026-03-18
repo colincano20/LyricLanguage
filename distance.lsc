@@ -1,0 +1,19 @@
+song "Distance"
+
+structure {
+    verse1 -> hook -> verse2 -> hook
+}
+
+verse1 {
+    "You're 300 miles away"
+    "It feels like forever, but it's only been a day"
+}
+%Test
+hook {
+    "Slide, slide"
+    repeat 3
+    "Come home"
+}
+verse2 {
+    "Phone light hitting your face"
+}
