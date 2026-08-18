@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LyricScript</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+  <header>
+  <h1>LyricScript</h1>
+  <div>
+    <button onclick="runCode()">Run</button>
+    <button onclick="exportTxt()">Export</button>
+  </div>
+</header>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-label">Editor</div>
+      <textarea id="editor" placeholder="Write your song here...">song "Distance"
+
+structure {
+  verse1 -> hook -> verse2 -> hook
+}
+
+verse1 {
+  "You're 300 miles away"
+  "It feel like forever"
+}
+
+hook {
+  "Slide, slide"
+  repeat 3
+}
+
+verse2 {
+  "Phone light hitting your face"
+}</textarea>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">Output</div>
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <script>
+    async function runCode() {
+      const source = document.getElementById("editor").value;
+      const output = document.getElementById("output");
+
+      output.textContent = "Running...";
+      output.className = "";
+
+      const response = await fetch("/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: source })
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        output.textContent = data.error;
+        output.className = "error";
+      } else {
+        output.textContent = data.output;
+        output.className = "";
+      }
+    }
+    function exportTxt() {
+        const output = document.getElementById("output").textContent;
+
+        if (!output || output === "Running...") {
+            alert("Run your song first before exporting.");
+            return;
+        }
+        const source = document.getElementById("editor").value;
+        const match = source.match(/song\s+"([^"]+)"/);
+        const filename = match ? match[1].replace(/\s+/g, "_") + ".txt" : "song.txt";
+
+
+        const blob = new Blob([output], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        }
+  </script>
+
+</body>
+</html>
