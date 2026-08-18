@@ -61,6 +61,10 @@ Distance
 
 ========================================
 ```
+## Web Editor
+
+LyricScript also runs in the browser. Start the server:
+Then open `http://127.0.0.1:5000/`. Write LyricScript on the left, hit Run, and the formatted song appears on the right. Export saves the output to a file.
 
 ## Language Reference
 
@@ -84,7 +88,11 @@ LyricScript is built as a full compiler pipeline:
 ## Requirements
 
 - Python 3.x
-- No external libraries needed
+- Flask (only needed for the web editor; the CLI runs on the standard library alone)
+
+```
+pip install flask
+```
 
 ## Usage
 ```
@@ -94,10 +102,14 @@ python main.py <file.lsc>
 ## Project Structure
 ```
 LyricScript/
-├── main.py          # entry point
+├── main.py          # CLI entry point
+├── server.py        # Flask web server
 ├── tokenizer.py     # lexical analysis
 ├── parser.py        # syntax analysis
 ├── interpreter.py   # output generation
+├── templates/
+│   └── index.html   # browser editor UI
 └── distance.lsc     # example song
 ```
+
 ```
